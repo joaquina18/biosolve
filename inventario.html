@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Inventario - TrazaMed</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" type="image/png" href="./TrazaMed_turquesa[1].png" />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background-color: #ffffff;
+      color: #002b5c;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* CONTENEDOR GENERAL */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 16px;
+    }
+
+    /* HEADER SUPERIOR */
+    .header-top {
+      background-color: #ffffff;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .header-top-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 0;
+      gap: 16px;
+    }
+
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-symbol {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 18px;
+      color: #005da9;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+
+    .logo-text {
+      font-size: 22px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .header-right {
+      text-align: right;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      align-items: flex-end;
+    }
+
+    .header-buttons {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .btn {
+      font-size: 13px;
+      border-radius: 999px;
+      padding: 8px 16px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .btn-dark {
+      background-color: #003b7b;
+      color: #ffffff;
+    }
+
+    .btn:hover {
+      opacity: 0.9;
+    }
+
+    /* NAV BAR */
+    .navbar {
+      background-color: #003b7b;
+    }
+
+    .nav-inner {
+      display: flex;
+      gap: 32px;
+      padding: 10px 16px;
+      font-size: 14px;
+      color: #ffffff;
+      overflow-x: auto;
+    }
+
+    .nav-link {
+      position: relative;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .nav-link:hover::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: -4px;
+      height: 2px;
+      background-color: #26c6da;
+    }
+
+    /* CONTENIDO PRINCIPAL */
+    .main-content {
+      padding: 40px 0;
+    }
+
+    .page-title {
+      font-size: 32px;
+      font-weight: 600;
+      margin-bottom: 30px;
+      color: #003b7b;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-bottom: 20px;
+      color: #26c6da;
+      font-weight: 600;
+      padding: 8px 0;
+    }
+
+    .back-link:hover {
+      text-decoration: underline;
+    }
+
+    /* FILTROS Y BÚSQUEDA */
+    .filters-section {
+      background-color: #f9f9f9;
+      padding: 20px;
+      border-radius: 6px;
+      margin-bottom: 30px;
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .filter-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .filter-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: #555;
+      text-transform: uppercase;
+    }
+
+    .filter-input,
+    .filter-select {
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 13px;
+      font-family: Arial, sans-serif;
+    }
+
+    .filter-select {
+      cursor: pointer;
+    }
+
+    /* TABLA DE INVENTARIO */
+    .inventory-container {
+      background-color: #ffffff;
+      border-radius: 6px;
+      border: 1px solid #e0e0e0;
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    thead {
+      background-color: #003b7b;
+      color: #ffffff;
+    }
+
+    th {
+      padding: 16px;
+      text-align: left;
+      font-weight: 600;
+      font-size: 13px;
+    }
+
+    tbody tr {
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    tbody tr:hover {
+      background-color: #f9f9f9;
+    }
+
+    td {
+      padding: 16px;
+      font-size: 13px;
+      color: #555;
+    }
+
+    .equipment-name {
+      font-weight: 600;
+      color: #003b7b;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .status-activo {
+      background-color: #e8f5e9;
+      color: #2e7d32;
+    }
+
+    .status-mantenimiento {
+      background-color: #fff3e0;
+      color: #f57f17;
+    }
+
+    .status-inactivo {
+      background-color: #ffebee;
+      color: #c62828;
+    }
+
+    /* PAGINATION */
+    .pagination {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 24px;
+      padding: 16px;
+    }
+
+    .pagination button {
+      padding: 6px 12px;
+      border: 1px solid #ddd;
+      background-color: #ffffff;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .pagination button:hover {
+      background-color: #003b7b;
+      color: #ffffff;
+      border-color: #003b7b;
+    }
+
+    .pagination button.active {
+      background-color: #003b7b;
+      color: #ffffff;
+      border-color: #003b7b;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 992px) {
+      .header-top-inner {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .header-right {
+        align-items: flex-start;
+        text-align: left;
+      }
+      .filters-section {
+        flex-direction: column;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .logo-text {
+        font-size: 18px;
+      }
+      .nav-inner {
+        gap: 16px;
+        font-size: 13px;
+      }
+      .page-title {
+        font-size: 24px;
+      }
+      th, td {
+        padding: 12px 8px;
+        font-size: 12px;
+      }
+      .filters-section {
+        flex-direction: column;
+      }
+    }
+
+    @media (max-width: 480px) {
+      th, td {
+        padding: 8px 6px;
+        font-size: 11px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER SUPERIOR -->
+  <header class="header-top">
+    <div class="container header-top-inner">
+      <div class="logo-area">
+        <a href="index.html" style="display: flex; align-items: center; gap: 12px;">
+          <div class="logo-symbol" style="background-image: url('./TrazaMed blanco.png');"></div>
+          <div class="logo-text">TrazaMed</div>
+        </a>
+      </div>
+      <div class="header-right">
+        <div class="header-buttons">
+          <a href="contacto-proveedores.html">
+            <button class="btn btn-dark">Contacto de proveedores</button>
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container main-content">
+    <a href="index.html" class="back-link">← Volver al inicio</a>
+    
+    <h1 class="page-title">Inventario de Equipos</h1>
+    
+    <!-- FILTROS -->
+    <div class="filters-section">
+      <div class="filter-group">
+        <label class="filter-label">Buscar</label>
+        <input type="text" class="filter-input" placeholder="Nombre del equipo...">
+      </div>
+      <div class="filter-group">
+        <label class="filter-label">Departamento</label>
+        <select class="filter-select">
+          <option>Todos</option>
+          <option>Imagenología</option>
+          <option>Laboratorio</option>
+          <option>UCI</option>
+          <option>Quirófano</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label class="filter-label">Estado</label>
+        <select class="filter-select">
+          <option>Todos</option>
+          <option>Activo</option>
+          <option>Mantenimiento</option>
+          <option>Inactivo</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- TABLA DE INVENTARIO -->
+    <div class="inventory-container">
+      <table>
+        <thead>
+          <tr>
+            <th>ID Equipo</th>
+            <th>Nombre</th>
+            <th>Departamento</th>
+            <th>Ubicación</th>
+            <th>Estado</th>
+            <th>Adquisición</th>
+            <th>Próximo Mantenimiento</th>
+            <th>Valor</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>#IM-001</td>
+            <td class="equipment-name">Resonador Magnético 1.5T</td>
+            <td>Imagenología</td>
+            <td>Piso 2 - Sala A</td>
+            <td><span class="status-badge status-activo">Activo</span></td>
+            <td>2019-06-15</td>
+            <td>2025-12-10</td>
+            <td>$850,000</td>
+          </tr>
+          <tr>
+            <td>#IM-002</td>
+            <td class="equipment-name">Tomógrafo Computarizado 64 slice</td>
+            <td>Imagenología</td>
+            <td>Piso 2 - Sala B</td>
+            <td><span class="status-badge status-activo">Activo</span></td>
+            <td>2020-03-22</td>
+            <td>2025-11-25</td>
+            <td>$750,000</td>
+          </tr>
+          <tr>
+            <td>#IM-003</td>
+            <td class="equipment-name">Mamógrafo Digital</td>
+            <td>Imagenología</td>
+            <td>Piso 2 - Sala C</td>
+            <td><span class="status-badge status-mantenimiento">Mantenimiento</span></td>
+            <td>2021-01-10</td>
+            <td>2025-11-30</td>
+            <td>$320,000</td>
+          </tr>
+          <tr>
+            <td>#IM-004</td>
+            <td class="equipment-name">Ecógrafo Premium 4D</td>
+            <td>Imagenología</td>
+            <td>Piso 3 - Consulta 1</td>
+            <td><span class="status-badge status-activo">Activo</span></td>
+            <td>2020-09-05</td>
+            <td>2025-12-15</td>
+            <td>$95,000</td>
+          </tr>
+          <tr>
+            <td>#LAB-001</td>
+            <td class="equipment-name">Analizador Hematológico</td>
+            <td>Laboratorio</td>
+            <td>Piso 1 - Lab Central</td>
+            <td><span class="status-badge status-activo">Activo</span></td>
+            <td>2019-11-12</td>
+            <td>2025-11-28</td>
+            <td>$180,000</td>
+          </tr>
+          <tr>
+            <td>#LAB-002</td>
+            <td class="equipment-name">Analizador Bioquímico Automático</td>
+            <td>Laboratorio</td>
+            <td>Piso 1 - Lab Central</td>
+            <td><span class="status-badge status-activo">Activo</span></td>
+            <td>2020-05-18</td>
+            <td>2025-12-05</td>
+            <td>$220,000</td>
+          </tr>
+          <tr>
+            <td>#UCI-001</td>
+            <td class="equipment-name">Monitor Multiparamétrico</td>
+            <td>UCI</td>
+            <td>Piso 4 - Cama 1</td>
+            <td><span class="status-badge status-activo">Activo</span></td>
+            <td>2021-02-03</td>
+            <td>2025-12-01</td>
+            <td>$45,000</td>
+          </tr>
+          <tr>
+            <td>#UCI-002</td>
+            <td class="equipment-name">Ventilador Mecánico</td>
+            <td>UCI</td>
+            <td>Piso 4 - Cama 3</td>
+            <td><span class="status-badge status-mantenimiento">Mantenimiento</span></td>
+            <td>2018-08-22</td>
+            <td>2025-11-20</td>
+            <td>$85,000</td>
+          </tr>
+          <tr>
+            <td>#QUI-001</td>
+            <td class="equipment-name">Láser Quirúrgico CO2</td>
+            <td>Quirófano</td>
+            <td>Piso 5 - Quirófano 1</td>
+            <td><span class="status-badge status-activo">Activo</span></td>
+            <td>2019-04-11</td>
+            <td>2025-12-20</td>
+            <td>$320,000</td>
+          </tr>
+          <tr>
+            <td>#QUI-002</td>
+            <td class="equipment-name">Torre de Endoscopia</td>
+            <td>Quirófano</td>
+            <td>Piso 5 - Quirófano 2</td>
+            <td><span class="status-badge status-inactivo">Inactivo</span></td>
+            <td>2017-07-30</td>
+            <td>N/A</td>
+            <td>$145,000</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- PAGINACIÓN -->
+    <div class="pagination">
+      <button>&lt;</button>
+      <button class="active">1</button>
+      <button>2</button>
+      <button>3</button>
+      <button>&gt;</button>
+    </div>
+  </main>
+
+</body>
+</html>

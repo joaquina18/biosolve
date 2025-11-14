@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Inventario de Equipos - TrazaMed</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" type="image/png" href="./TrazaMed_turquesa[1].png" />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background-color: #ffffff;
+      color: #002b5c;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* CONTENEDOR GENERAL */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 16px;
+    }
+
+    /* HEADER SUPERIOR */
+    .header-top {
+      background-color: #ffffff;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .header-top-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 0;
+      gap: 16px;
+    }
+
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-symbol {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 18px;
+      color: #005da9;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+
+    .logo-text {
+      font-size: 22px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .header-right {
+      text-align: right;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      align-items: flex-end;
+    }
+
+    .header-buttons {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .btn {
+      font-size: 13px;
+      border-radius: 999px;
+      padding: 8px 16px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .btn-dark {
+      background-color: #003b7b;
+      color: #ffffff;
+    }
+
+    .btn:hover {
+      opacity: 0.9;
+    }
+
+    /* NAV BAR */
+    .navbar {
+      background-color: #003b7b;
+    }
+
+    .nav-inner {
+      display: flex;
+      gap: 32px;
+      padding: 10px 16px;
+      font-size: 14px;
+      color: #ffffff;
+      overflow-x: auto;
+    }
+
+    .nav-link {
+      position: relative;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .nav-link:hover::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: -4px;
+      height: 2px;
+      background-color: #26c6da;
+    }
+
+    /* CONTENIDO PRINCIPAL */
+    .main-content {
+      padding: 40px 0;
+    }
+
+    .page-title {
+      font-size: 32px;
+      font-weight: 600;
+      margin-bottom: 30px;
+      color: #003b7b;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-bottom: 20px;
+      color: #26c6da;
+      font-weight: 600;
+      padding: 8px 0;
+    }
+
+    .back-link:hover {
+      text-decoration: underline;
+    }
+
+    /* TARJETAS DE EQUIPOS */
+    .equipment-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 24px;
+      margin-bottom: 40px;
+    }
+
+    .equipment-card {
+      background-color: #ffffff;
+      border-radius: 8px;
+      padding: 24px;
+      border: 1px solid #e8e8e8;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      transition: box-shadow 0.3s ease;
+    }
+
+    .equipment-card:hover {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    }
+
+    .equipment-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 16px;
+    }
+
+    .equipment-icon {
+      font-size: 32px;
+      width: 50px;
+      height: 50px;
+      background-color: #f5f5f5;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .equipment-icon-red {
+      background-color: #ffe0e0;
+    }
+
+    .equipment-icon-purple {
+      background-color: #f3e5f5;
+    }
+
+    .equipment-icon-orange {
+      background-color: #ffe8d6;
+    }
+
+    .equipment-icon-green {
+      background-color: #e8f5e9;
+    }
+
+    .equipment-icon-blue {
+      background-color: #e3f2fd;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .status-normal {
+      background-color: #e8f5e9;
+      color: #2e7d32;
+    }
+
+    .status-maximo {
+      background-color: #ffe8d6;
+      color: #e65100;
+    }
+
+    .status-critico {
+      background-color: #ffebee;
+      color: #c62828;
+    }
+
+    .equipment-name {
+      font-size: 18px;
+      font-weight: 600;
+      color: #002b5c;
+      margin-bottom: 4px;
+    }
+
+    .equipment-description {
+      font-size: 13px;
+      color: #777;
+      line-height: 1.4;
+      margin-bottom: 16px;
+    }
+
+    .equipment-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin: 16px 0;
+      padding: 12px 0;
+      border-top: 1px solid #e8e8e8;
+      border-bottom: 1px solid #e8e8e8;
+    }
+
+    .stat {
+      text-align: center;
+    }
+
+    .stat-value {
+      font-size: 20px;
+      font-weight: 700;
+      color: #003b7b;
+      display: block;
+    }
+
+    .stat-label {
+      font-size: 11px;
+      color: #999;
+      margin-top: 4px;
+    }
+
+    .occupancy-section {
+      margin: 16px 0;
+    }
+
+    .occupancy-label {
+      font-size: 13px;
+      color: #555;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .occupancy-bar {
+      height: 6px;
+      background-color: #e0e0e0;
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .occupancy-fill {
+      height: 100%;
+      border-radius: 3px;
+      transition: width 0.3s ease;
+    }
+
+    .occupancy-fill-88 {
+      width: 88%;
+      background-color: #ffc107;
+    }
+
+    .occupancy-fill-95 {
+      width: 95%;
+      background-color: #f44336;
+    }
+
+    .occupancy-fill-70 {
+      width: 70%;
+      background-color: #ffc107;
+    }
+
+    .occupancy-fill-45 {
+      width: 45%;
+      background-color: #4caf50;
+    }
+
+    .occupancy-fill-82 {
+      width: 82%;
+      background-color: #ffc107;
+    }
+
+    .occupancy-percentage {
+      font-size: 13px;
+      color: #555;
+      margin-top: 6px;
+      text-align: right;
+      font-weight: 600;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 992px) {
+      .header-top-inner {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .header-right {
+        align-items: flex-start;
+        text-align: left;
+      }
+      .equipment-grid {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      }
+    }
+
+    @media (max-width: 640px) {
+      .logo-text {
+        font-size: 18px;
+      }
+      .nav-inner {
+        gap: 16px;
+        font-size: 13px;
+      }
+      .page-title {
+        font-size: 24px;
+      }
+      .equipment-grid {
+        grid-template-columns: 1fr;
+      }
+      .equipment-stats {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    @media (max-width: 480px) {
+      .equipment-card {
+        padding: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER SUPERIOR -->
+  <header class="header-top">
+    <div class="container header-top-inner">
+      <div class="logo-area">
+        <a href="index.html" style="display: flex; align-items: center; gap: 12px;">
+          <div class="logo-symbol" style="background-image: url('./TrazaMed blanco.png');"></div>
+          <div class="logo-text">TrazaMed</div>
+        </a>
+      </div>
+      <div class="header-right">
+        <div class="header-buttons">
+          <a href="contacto-proveedores.html">
+            <button class="btn btn-dark">Contacto de proveedores</button>
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- NAV BAR -->
+  <nav class="navbar">
+    <div class="container nav-inner">
+      <a href="index.html" class="nav-link">Inicio</a>
+      <div class="nav-link">Médicos</div>
+      <div class="nav-link">Especialidades</div>
+      <div class="nav-link">Nosotros</div>
+      <div class="nav-link">Servicios</div>
+      <div class="nav-link">Pacientes y Visitantes</div>
+      <div class="nav-link">Unidades Médicas</div>
+      <div class="nav-link">Anglo Salud</div>
+      <div class="nav-link">Centro de Entrenamiento</div>
+      <div class="nav-link">Blog</div>
+    </div>
+  </nav>
+
+  <main class="container main-content">
+    <a href="index.html" class="back-link">← Volver al inicio</a>
+    
+    <h1 class="page-title">Inventario de Equipos</h1>
+    
+    <div class="equipment-grid">
+      <!-- Tarjeta 1: Resonador Magnético -->
+      <div class="equipment-card">
+        <div class="equipment-header">
+          <div class="equipment-icon equipment-icon-red">📳</div>
+          <span class="status-badge status-normal">Normal</span>
+        </div>
+        <div class="equipment-name">Resonador Magnético</div>
+        <div class="equipment-description">Crear imágenes detalladas de órganos y tejidos internos del cuerpo</div>
+        
+        <div class="equipment-stats">
+          <div class="stat">
+            <span class="stat-value">1</span>
+            <span class="stat-label">Óptimos</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value">0</span>
+            <span class="stat-label">En Desuso</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value">1</span>
+            <span class="stat-label">En Reparación</span>
+          </div>
+        </div>
+        
+        <div class="occupancy-section">
+          <div class="occupancy-label">Ocupación</div>
+          <div class="occupancy-bar">
+            <div class="occupancy-fill occupancy-fill-88"></div>
+          </div>
+          <div class="occupancy-percentage">88%</div>
+        </div>
+      </div>
+
+      <!-- Tarjeta 2: Mamógrafo -->
+      <div class="equipment-card">
+        <div class="equipment-header">
+          <div class="equipment-icon equipment-icon-purple">📳</div>
+          <span class="status-badge status-maximo">Capacidad Máxima</span>
+        </div>
+        <div class="equipment-name">Mamógrafo</div>
+        <div class="equipment-description">Equipo de rayos X especializado que se utiliza para realizar una mamografía</div>
+        
+        <div class="equipment-stats">
+          <div class="stat">
+            <span class="stat-value">2</span>
+            <span class="stat-label">Óptimos</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value">1</span>
+            <span class="stat-label">En Desuso</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value">1</span>
+            <span class="stat-label">En Reparación</span>
+          </div>
+        </div>
+        
+        <div class="occupancy-section">
+          <div class="occupancy-label">Ocupación</div>
+          <div class="occupancy-bar">
+            <div class="occupancy-fill occupancy-fill-95"></div>
+          </div>
+          <div class="occupancy-percentage">95%</div>
+        </div>
+      </div>
+
+      <!-- Tarjeta 3: Tomógrafo Computarizado -->
+      <div class="equipment-card">
+        <div class="equipment-header">
+          <div class="equipment-icon equipment-icon-orange">📳</div>
+          <span class="status-badge status-normal">Normal</span>
+        </div>
+        <div class="equipment-name">Tomógrafo Computarizado</div>
+        <div class="equipment-description">Proporciona imágenes transversales precisas del cuerpo para diagnóstico detallado</div>
+        
+        <div class="equipment-stats">
+          <div class="stat">
+            <span class="stat-value">3</span>
+            <span class="stat-label">Óptimos</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value">2</span>
+            <span class="stat-label">En Desuso</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value">0</span>
+            <span class="stat-label">En Reparación</span>
+          </div>
+        </div>
+        
+        <div class="occupancy-section">
+          <div class="occupancy-label">Ocupación</div>
+          <div class="occupancy-bar">
+            <div class="occupancy-fill occupancy-fill-70"></div>
+          </div>
+          <div class="occupancy-percentage">70%</div>
+        </div>
+      </div>
+
+      <!-- Tarjeta 4: Ecógrafo -->
+      <div class="equipment-card">
+        <div class="equipment-header">
+          <div class="equipment-icon equipment-icon-green">📳</div>
+          <span class="status-badge status-normal">Normal</span>
+        </div>
+        <div class="equipment-name">Ecógrafo (Ultrasonido)</div>
+        <div class="equipment-description">Utiliza ondas de ultrasonido para visualizar órganos internos sin radiación</div>
+        
+        <div class="equipment-stats">
+          <div class="stat">
+            <span class="stat-value">5</span>
+            <span class="stat-label">Óptimos</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value">1</span>
+            <span class="stat-label">En Desuso</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value">2</span>
+            <span class="stat-label">En Reparación</span>
+          </div>
+        </div>
+        
+        <div class="occupancy-section">
+          <div class="occupancy-label">Ocupación</div>
+          <div class="occupancy-bar">
+            <div class="occupancy-fill occupancy-fill-45"></div>
+          </div>
+          <div class="occupancy-percentage">45%</div>
+        </div>
+      </div>
+
+      <!-- Tarjeta 5: Fluoroscopio -->
+      <div class="equipment-card">
+        <div class="equipment-header">
+          <div class="equipment-icon equipment-icon-blue">📳</div>
+          <span class="status-badge status-normal">Normal</span>
+        </div>
+        <div class="equipment-name">Fluoroscopio Digital</div>
+        <div class="equipment-description">Sistema de rayos X en tiempo real para visualización dinámica de procedimientos</div>
+        
+        <div class="equipment-stats">
+          <div class="stat">
+            <span class="stat-value">2</span>
+            <span class="stat-label">Óptimos</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value">0</span>
+            <span class="stat-label">En Desuso</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value">1</span>
+            <span class="stat-label">En Reparación</span>
+          </div>
+        </div>
+        
+        <div class="occupancy-section">
+          <div class="occupancy-label">Ocupación</div>
+          <div class="occupancy-bar">
+            <div class="occupancy-fill occupancy-fill-82"></div>
+          </div>
+          <div class="occupancy-percentage">82%</div>
+        </div>
+      </div>
+
+      <!-- Tarjeta 6: Rayos X Portátil -->
+      <div class="equipment-card">
+        <div class="equipment-header">
+          <div class="equipment-icon equipment-icon-orange">📳</div>
+          <span class="status-badge status-normal">Normal</span>
+        </div>
+        <div class="equipment-name">Equipo Rayos X Portátil</div>
+        <div class="equipment-description">Sistema móvil de rayos X para estudios en diferentes ubicaciones del hospital</div>
+        
+        <div class="equipment-stats">
+          <div class="stat">
+            <span class="stat-value">4</span>
+            <span class="stat-label">Óptimos</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value">1</span>
+            <span class="stat-label">En Desuso</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value">0</span>
+            <span class="stat-label">En Reparación</span>
+          </div>
+        </div>
+        
+        <div class="occupancy-section">
+          <div class="occupancy-label">Ocupación</div>
+          <div class="occupancy-bar">
+            <div class="occupancy-fill occupancy-fill-60"></div>
+          </div>
+          <div class="occupancy-percentage">60%</div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+</body>
+</html>

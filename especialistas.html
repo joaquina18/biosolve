@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Especialistas - TrazaMed</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" type="image/png" href="./TrazaMed_turquesa[1].png" />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background-color: #ffffff;
+      color: #002b5c;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* CONTENEDOR GENERAL */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 16px;
+    }
+
+    /* HEADER SUPERIOR */
+    .header-top {
+      background-color: #ffffff;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .header-top-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 0;
+      gap: 16px;
+    }
+
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-symbol {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 18px;
+      color: #005da9;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+
+    .logo-text {
+      font-size: 22px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .header-right {
+      text-align: right;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      align-items: flex-end;
+    }
+
+    .header-buttons {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .btn {
+      font-size: 13px;
+      border-radius: 999px;
+      padding: 8px 16px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .btn-dark {
+      background-color: #003b7b;
+      color: #ffffff;
+    }
+
+    .btn:hover {
+      opacity: 0.9;
+    }
+
+    /* NAV BAR */
+    .navbar {
+      background-color: #003b7b;
+    }
+
+    .nav-inner {
+      display: flex;
+      gap: 32px;
+      padding: 10px 16px;
+      font-size: 14px;
+      color: #ffffff;
+      overflow-x: auto;
+    }
+
+    .nav-link {
+      position: relative;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .nav-link:hover::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: -4px;
+      height: 2px;
+      background-color: #26c6da;
+    }
+
+    /* CONTENIDO PRINCIPAL */
+    .main-content {
+      padding: 40px 0;
+    }
+
+    .page-title {
+      font-size: 32px;
+      font-weight: 600;
+      margin-bottom: 30px;
+      color: #003b7b;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-bottom: 20px;
+      color: #26c6da;
+      font-weight: 600;
+      padding: 8px 0;
+    }
+
+    .back-link:hover {
+      text-decoration: underline;
+    }
+
+    /* TARJETAS DE ESPECIALISTAS */
+    .specialists-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 24px;
+      margin-bottom: 40px;
+    }
+
+    .specialist-card {
+      background-color: #f9f9f9;
+      border-radius: 8px;
+      padding: 24px;
+      border: 1px solid #e0e0e0;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      transition: box-shadow 0.3s ease;
+    }
+
+    .specialist-card:hover {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    }
+
+    .specialist-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 16px;
+    }
+
+    .specialist-name {
+      font-size: 18px;
+      font-weight: 600;
+      color: #002b5c;
+      margin-bottom: 4px;
+    }
+
+    .specialist-specialty {
+      font-size: 14px;
+      color: #0066cc;
+      font-weight: 500;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .status-disponible {
+      background-color: #e8f5e9;
+      color: #2e7d32;
+    }
+
+    .status-ocupado {
+      background-color: #fff3e0;
+      color: #f57f17;
+    }
+
+    .specialist-info {
+      margin: 16px 0;
+      font-size: 14px;
+      color: #555;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .specialist-info-icon {
+      color: #0066cc;
+      font-weight: 600;
+    }
+
+    .specialist-rating {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 16px 0;
+      font-size: 14px;
+      color: #555;
+    }
+
+    .stars {
+      color: #ffc107;
+      font-size: 16px;
+    }
+
+    .rating-value {
+      font-weight: 600;
+      color: #002b5c;
+    }
+
+    .specialist-buttons {
+      display: flex;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .specialist-buttons button {
+      flex: 1;
+      padding: 10px 16px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      white-space: nowrap;
+    }
+
+    .btn-perfil {
+      background-color: #ffffff;
+      color: #003b7b;
+      border: 1px solid #003b7b;
+    }
+
+    .btn-perfil:hover {
+      background-color: #f0f0f0;
+    }
+
+    .btn-contactar {
+      background-color: #0066ff;
+      color: #ffffff;
+      border: none;
+    }
+
+    .btn-contactar:hover {
+      background-color: #0052cc;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 992px) {
+      .header-top-inner {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .header-right {
+        align-items: flex-start;
+        text-align: left;
+      }
+      .specialists-grid {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      }
+    }
+
+    @media (max-width: 640px) {
+      .logo-text {
+        font-size: 18px;
+      }
+      .nav-inner {
+        gap: 16px;
+        font-size: 13px;
+      }
+      .page-title {
+        font-size: 24px;
+      }
+      .specialists-grid {
+        grid-template-columns: 1fr;
+      }
+      .specialist-buttons {
+        flex-direction: column;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .specialist-card {
+        padding: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER SUPERIOR -->
+  <header class="header-top">
+    <div class="container header-top-inner">
+      <div class="logo-area">
+        <a href="index.html" style="display: flex; align-items: center; gap: 12px;">
+          <div class="logo-symbol" style="background-image: url('./TrazaMed blanco.png');"></div>
+          <div class="logo-text">TrazaMed</div>
+        </a>
+      </div>
+      <div class="header-right">
+        <div class="header-buttons">
+          <a href="contacto-proveedores.html">
+            <button class="btn btn-dark">Contacto de proveedores</button>
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container main-content">
+    <a href="index.html" class="back-link">← Volver al inicio</a>
+    
+    <h1 class="page-title">Especialistas</h1>
+    
+    <div class="specialists-grid">
+      <!-- Tarjeta 1 -->
+      <div class="specialist-card">
+        <div class="specialist-header">
+          <div>
+            <div class="specialist-name">Ing. Carlos López Fernández</div>
+            <div class="specialist-specialty">Resonador magnético</div>
+          </div>
+          <span class="status-badge status-disponible">Disponible</span>
+        </div>
+        
+        <div class="specialist-info">
+          <span class="specialist-info-icon">👨‍💼</span>
+          <span>5 años de experiencia</span>
+        </div>
+        
+        <div class="specialist-info">
+          <span class="specialist-info-icon">📋</span>
+          <span>45 servicios realizados</span>
+        </div>
+        
+        <div class="specialist-info">
+          <span class="specialist-info-icon">📞</span>
+          <span>+51 612 111 222</span>
+        </div>
+        
+        <div class="specialist-info">
+          <span class="specialist-info-icon">✉️</span>
+          <span>c.lopez@santaclara.com</span>
+        </div>
+        
+        <div class="specialist-rating">
+          <span>Valoración</span>
+          <span class="stars">★</span>
+          <span class="rating-value">4.8</span>
+        </div>
+        
+        <div class="specialist-buttons">
+          <button class="btn-perfil">Ver Perfil</button>
+          <button class="btn-contactar">Contactar</button>
+        </div>
+      </div>
+
+      <!-- Tarjeta 2 -->
+      <div class="specialist-card">
+        <div class="specialist-header">
+          <div>
+            <div class="specialist-name">Ing. Elena Martínez Silva</div>
+            <div class="specialist-specialty">Mamógrafo</div>
+          </div>
+          <span class="status-badge status-ocupado">Ocupado</span>
+        </div>
+        
+        <div class="specialist-info">
+          <span class="specialist-info-icon">👩‍💼</span>
+          <span>12 años de experiencia</span>
+        </div>
+        
+        <div class="specialist-info">
+          <span class="specialist-info-icon">📋</span>
+          <span>38 servicios realizados</span>
+        </div>
+        
+        <div class="specialist-info">
+          <span class="specialist-info-icon">📞</span>
+          <span>+51 623 222 333</span>
+        </div>
+        
+        <div class="specialist-info">
+          <span class="specialist-info-icon">✉️</span>
+          <span>e.martinez@santaclara.com</span>
+        </div>
+        
+        <div class="specialist-rating">
+          <span>Valoración</span>
+          <span class="stars">★</span>
+          <span class="rating-value">4.9</span>
+        </div>
+        
+        <div class="specialist-buttons">
+          <button class="btn-perfil">Ver Perfil</button>
+          <button class="btn-contactar">Contactar</button>
+        </div>
+      </div>
+
+      <!-- Tarjeta 3 -->
+      <div class="specialist-card">
+        <div class="specialist-header">
+          <div>
+            <div class="specialist-name">Dr. Juan Rodríguez García</div>
+            <div class="specialist-specialty">Tomógrafo Computarizado</div>
+          </div>
+          <span class="status-badge status-disponible">Disponible</span>
+        </div>
+        
+        <div class="specialist-info">
+          <span class="specialist-info-icon">👨‍⚕️</span>
+          <span>8 años de experiencia</span>
+        </div>
+        
+        <div class="specialist-info">
+          <span class="specialist-info-icon">📋</span>
+          <span>52 servicios realizados</span>
+        </div>
+        
+        <div class="specialist-info">
+          <span class="specialist-info-icon">📞</span>
+          <span>+51 634 444 555</span>
+        </div>
+        
+        <div class="specialist-info">
+          <span class="specialist-info-icon">✉️</span>
+          <span>j.rodriguez@santaclara.com</span>
+        </div>
+        
+        <div class="specialist-rating">
+          <span>Valoración</span>
+          <span class="stars">★</span>
+          <span class="rating-value">4.7</span>
+        </div>
+        
+        <div class="specialist-buttons">
+          <button class="btn-perfil">Ver Perfil</button>
+          <button class="btn-contactar">Contactar</button>
+        </div>
+      </div>
+
+      <!-- Tarjeta 4 -->
+      <div class="specialist-card">
+        <div class="specialist-header">
+          <div>
+            <div class="specialist-name">Dra. María González López</div>
+            <div class="specialist-specialty">Ultrasonido</div>
+          </div>
+          <span class="status-badge status-disponible">Disponible</span>
+        </div>
+        
+        <div class="specialist-info">
+          <span class="specialist-info-icon">👩‍⚕️</span>
+          <span>10 años de experiencia</span>
+        </div>
+        
+        <div class="specialist-info">
+          <span class="specialist-info-icon">📋</span>
+          <span>48 servicios realizados</span>
+        </div>
+        
+        <div class="specialist-info">
+          <span class="specialist-info-icon">📞</span>
+          <span>+51 645 666 777</span>
+        </div>
+        
+        <div class="specialist-info">
+          <span class="specialist-info-icon">✉️</span>
+          <span>m.gonzalez@santaclara.com</span>
+        </div>
+        
+        <div class="specialist-rating">
+          <span>Valoración</span>
+          <span class="stars">★</span>
+          <span class="rating-value">4.6</span>
+        </div>
+        
+        <div class="specialist-buttons">
+          <button class="btn-perfil">Ver Perfil</button>
+          <button class="btn-contactar">Contactar</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+</body>
+</html>

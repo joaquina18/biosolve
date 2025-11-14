@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>TrazaMed</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" type="image/png" href="./TrazaMed_turquesa[1].png" />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background-color: #ffffff;
+      color: #002b5c;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* CONTENEDOR GENERAL */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 16px;
+    }
+
+    /* HEADER SUPERIOR */
+    .header-top {
+      background-color: #ffffff;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .header-top-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 0;
+      gap: 16px;
+    }
+
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-symbol {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 18px;
+      color: #005da9;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+
+    .logo-text {
+      font-size: 22px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .header-right {
+      text-align: right;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      align-items: flex-end;
+    }
+
+    .phones {
+      font-size: 13px;
+      color: #555;
+    }
+
+    .header-buttons {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .btn {
+      font-size: 13px;
+      border-radius: 999px;
+      padding: 8px 16px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .btn-light {
+      background-color: #26c6da;
+      color: #ffffff;
+    }
+
+    .btn-dark {
+      background-color: #003b7b;
+      color: #ffffff;
+    }
+
+    .btn:hover {
+      opacity: 0.9;
+    }
+
+    /* NAV BAR */
+    .navbar {
+      background-color: #003b7b;
+    }
+
+    .nav-inner {
+      display: flex;
+      gap: 32px;
+      padding: 10px 16px;
+      font-size: 14px;
+      color: #ffffff;
+      overflow-x: auto;
+    }
+
+    .nav-link {
+      position: relative;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .nav-link:hover::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: -4px;
+      height: 2px;
+      background-color: #26c6da;
+    }
+
+    /* BLOQUES AZULES PRINCIPALES */
+    .quick-links-section {
+      margin-top: 24px;
+    }
+
+    .quick-links-row {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      min-height: 220px;
+    }
+
+    .quick-link {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 12px;
+      color: #ffffff;
+      text-align: center;
+    }
+
+    .quick-link:nth-child(1) { background-color: #003b7b; }
+    .quick-link:nth-child(2) { background-color: #004a96; }
+    .quick-link:nth-child(3) { background-color: #005da9; }
+    .quick-link:nth-child(4) { background-color: #0b72c4; }
+    .quick-link:nth-child(5) { background-color: #1e88e5; }
+
+    .quick-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      border: 2px solid #ffffff;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      font-weight: 300;
+    }
+
+    .quick-title {
+      font-size: 16px;
+      font-weight: 500;
+    }
+
+    /* SECCIÓN INFERIOR (VIDEOS / BANNERS) */
+    .bottom-section {
+      padding: 32px 0 40px;
+    }
+
+    .cards-row {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+    }
+
+    .card {
+      background-color: #f4f4f4;
+      border-radius: 6px;
+      overflow: hidden;
+      min-height: 220px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .card-placeholder {
+      width: 80%;
+      height: 70%;
+      background: #d0d0d0;
+      border-radius: 4px;
+    }
+
+    .play-circle {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      border: 3px solid #ffffff;
+      background-color: rgba(0, 0, 0, 0.4);
+      position: absolute;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .play-triangle {
+      width: 0;
+      height: 0;
+      border-top: 10px solid transparent;
+      border-bottom: 10px solid transparent;
+      border-left: 16px solid #ffffff;
+      margin-left: 4px;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 992px) {
+      .header-top-inner {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .header-right {
+        align-items: flex-start;
+        text-align: left;
+      }
+      .quick-links-row {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      .cards-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .quick-links-row {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .logo-text {
+        font-size: 18px;
+      }
+      .nav-inner {
+        gap: 16px;
+        font-size: 13px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .quick-links-row {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER SUPERIOR -->
+  <header class="header-top">
+    <div class="container header-top-inner">
+      <div class="logo-area">
+        <div class="logo-symbol" style="background-image: url('./TrazaMed blanco.png');"></div>
+        <div class="logo-text">TrazaMed</div>
+      </div>
+      <div class="header-right">
+        <div class="header-buttons">
+          <a href="contacto-proveedores.html">
+            <button class="btn btn-dark">Contacto de proveedores</button>
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- NAV BAR -->
+  <nav class="navbar">
+    <div class="container nav-inner">
+      <div class="nav-link">Contacto de proveedores</div>
+    </div>
+  </nav>
+
+  <main class="container">
+    <!-- BLOQUES AZULES PRINCIPALES -->
+    <section class="quick-links-section">
+      <div class="quick-links-row">
+        <a href="gestion-equipos.html" style="text-decoration: none; color: inherit;">
+          <div class="quick-link">
+            <div class="quick-icon">🏥</div>
+            <div class="quick-title">Gestión de equipos</div>
+          </div>
+        </a>
+        <a href="estadisticas-generales.html" style="text-decoration: none; color: inherit;">
+          <div class="quick-link">
+            <div class="quick-icon">🗓</div>
+            <div class="quick-title">Estadísticas generales</div>
+          </div>
+        </a>
+        <a href="especialistas.html" style="text-decoration: none; color: inherit;">
+          <div class="quick-link">
+            <div class="quick-icon">👷‍♂️</div>
+            <div class="quick-title">Especialistas</div>
+          </div>
+        </a>
+        <a href="comparacion-departamentos.html" style="text-decoration: none; color: inherit;">
+          <div class="quick-link">
+            <div class="quick-icon">📊</div>
+            <div class="quick-title">Departamentos</div>
+          </div>
+        </a>
+        <a href="inventario.html" style="text-decoration: none; color: inherit;">
+          <div class="quick-link">
+            <div class="quick-icon">📈</div>
+            <div class="quick-title">Inventario</div>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <!-- SECCIÓN INFERIOR (DOS CARDS TIPO VIDEO) -->
+    <section class="bottom-section">
+      <div class="cards-row">
+        <div class="card" style="background-image: url('./dispositivo.png'); background-size: cover; background-position: center;">
+          <div class="play-circle" style="display: none;">
+            <div class="play-triangle"></div>
+          </div>
+        </div>
+        <div class="card" style="background-image: url('./promedco-equipos-medicos-9-11-22-1.jpg'); background-size: cover; background-position: center;">
+          <div class="play-circle" style="display: none;">
+            <div class="play-triangle"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+</body>
+</html>

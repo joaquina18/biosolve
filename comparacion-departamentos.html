@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Comparación de Departamentos - TrazaMed</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" type="image/png" href="./TrazaMed_turquesa[1].png" />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background-color: #ffffff;
+      color: #002b5c;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* CONTENEDOR GENERAL */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 16px;
+    }
+
+    /* HEADER SUPERIOR */
+    .header-top {
+      background-color: #ffffff;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .header-top-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 0;
+      gap: 16px;
+    }
+
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-symbol {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 18px;
+      color: #005da9;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+
+    .logo-text {
+      font-size: 22px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .header-right {
+      text-align: right;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      align-items: flex-end;
+    }
+
+    .header-buttons {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .btn {
+      font-size: 13px;
+      border-radius: 999px;
+      padding: 8px 16px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .btn-dark {
+      background-color: #003b7b;
+      color: #ffffff;
+    }
+
+    .btn:hover {
+      opacity: 0.9;
+    }
+
+    /* NAV BAR */
+    .navbar {
+      background-color: #003b7b;
+    }
+
+    .nav-inner {
+      display: flex;
+      gap: 32px;
+      padding: 10px 16px;
+      font-size: 14px;
+      color: #ffffff;
+      overflow-x: auto;
+    }
+
+    .nav-link {
+      position: relative;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .nav-link:hover::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: -4px;
+      height: 2px;
+      background-color: #26c6da;
+    }
+
+    /* CONTENIDO PRINCIPAL */
+    .main-content {
+      padding: 40px 0;
+    }
+
+    .page-title {
+      font-size: 32px;
+      font-weight: 600;
+      margin-bottom: 30px;
+      color: #003b7b;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-bottom: 20px;
+      color: #26c6da;
+      font-weight: 600;
+      padding: 8px 0;
+    }
+
+    .back-link:hover {
+      text-decoration: underline;
+    }
+
+    /* TABLA COMPARATIVA */
+    .comparison-container {
+      background-color: #f9f9f9;
+      border-radius: 8px;
+      padding: 24px;
+      border: 1px solid #e0e0e0;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: #ffffff;
+    }
+
+    th {
+      background-color: #f5f5f5;
+      color: #555;
+      padding: 16px;
+      text-align: left;
+      font-weight: 600;
+      border-bottom: 2px solid #e0e0e0;
+      font-size: 14px;
+    }
+
+    td {
+      padding: 16px;
+      border-bottom: 1px solid #e0e0e0;
+      font-size: 14px;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tbody tr:hover {
+      background-color: #f9f9f9;
+    }
+
+    .department-icon {
+      width: 24px;
+      height: 24px;
+      display: inline-block;
+      margin-right: 8px;
+      font-size: 20px;
+    }
+
+    .department-name {
+      display: flex;
+      align-items: center;
+      font-weight: 500;
+      color: #002b5c;
+    }
+
+    .numeric-cell {
+      text-align: center;
+      font-weight: 600;
+      color: #003b7b;
+    }
+
+    .occupancy-bar-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .occupancy-bar {
+      flex: 1;
+      height: 8px;
+      background-color: #e0e0e0;
+      border-radius: 4px;
+      overflow: hidden;
+      min-width: 100px;
+    }
+
+    .occupancy-fill {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 0.3s ease;
+    }
+
+    .occupancy-fill-75 {
+      width: 75%;
+      background-color: #ffc107;
+    }
+
+    .occupancy-fill-60 {
+      width: 60%;
+      background-color: #4caf50;
+    }
+
+    .occupancy-fill-88 {
+      width: 88%;
+      background-color: #ffc107;
+    }
+
+    .occupancy-fill-95 {
+      width: 95%;
+      background-color: #f44336;
+    }
+
+    .occupancy-fill-80 {
+      width: 80%;
+      background-color: #ffc107;
+    }
+
+    .occupancy-percentage {
+      font-weight: 600;
+      color: #555;
+      min-width: 50px;
+      text-align: right;
+    }
+
+    /* CONTROLES DE NAVEGACIÓN */
+    .navigation-controls {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 16px;
+      margin-top: 24px;
+    }
+
+    .nav-button {
+      background-color: #e0e0e0;
+      border: none;
+      width: 32px;
+      height: 32px;
+      border-radius: 4px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      color: #333;
+      transition: background-color 0.3s ease;
+    }
+
+    .nav-button:hover {
+      background-color: #d0d0d0;
+    }
+
+    .progress-bar {
+      flex: 1;
+      height: 4px;
+      background-color: #e0e0e0;
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background-color: #999;
+      width: 50%;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 992px) {
+      .header-top-inner {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .header-right {
+        align-items: flex-start;
+        text-align: left;
+      }
+      .comparison-container {
+        overflow-x: auto;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .logo-text {
+        font-size: 18px;
+      }
+      .nav-inner {
+        gap: 16px;
+        font-size: 13px;
+      }
+      .page-title {
+        font-size: 24px;
+      }
+      th, td {
+        padding: 12px 8px;
+        font-size: 13px;
+      }
+      .occupancy-bar-container {
+        flex-direction: column;
+      }
+      .occupancy-bar {
+        min-width: 100%;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .comparison-container {
+        padding: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER SUPERIOR -->
+  <header class="header-top">
+    <div class="container header-top-inner">
+      <div class="logo-area">
+        <a href="index.html" style="display: flex; align-items: center; gap: 12px;">
+          <div class="logo-symbol" style="background-image: url('./TrazaMed blanco.png');"></div>
+          <div class="logo-text">TrazaMed</div>
+        </a>
+      </div>
+      <div class="header-right">
+        <div class="header-buttons">
+          <a href="contacto-proveedores.html">
+            <button class="btn btn-dark">Contacto de proveedores</button>
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container main-content">
+    <a href="index.html" class="back-link">← Volver al inicio</a>
+    
+    <h1 class="page-title">Comparación de Departamentos</h1>
+    
+    <div class="comparison-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Departamento</th>
+            <th>Óptimos</th>
+            <th>En Desuso</th>
+            <th>En Reparación</th>
+            <th>Ocupación</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="department-name">
+              <span class="department-icon">📋</span>
+              Tomógrafo
+            </td>
+            <td class="numeric-cell">8</td>
+            <td class="numeric-cell">1</td>
+            <td class="numeric-cell">1</td>
+            <td>
+              <div class="occupancy-bar-container">
+                <div class="occupancy-bar">
+                  <div class="occupancy-fill occupancy-fill-75"></div>
+                </div>
+                <span class="occupancy-percentage">75%</span>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td class="department-name">
+              <span class="department-icon">📋</span>
+              Rayos X
+            </td>
+            <td class="numeric-cell">8</td>
+            <td class="numeric-cell">3</td>
+            <td class="numeric-cell">3</td>
+            <td>
+              <div class="occupancy-bar-container">
+                <div class="occupancy-bar">
+                  <div class="occupancy-fill occupancy-fill-60"></div>
+                </div>
+                <span class="occupancy-percentage">60%</span>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td class="department-name">
+              <span class="department-icon">📋</span>
+              Resonador
+            </td>
+            <td class="numeric-cell">1</td>
+            <td class="numeric-cell">0</td>
+            <td class="numeric-cell">1</td>
+            <td>
+              <div class="occupancy-bar-container">
+                <div class="occupancy-bar">
+                  <div class="occupancy-fill occupancy-fill-88"></div>
+                </div>
+                <span class="occupancy-percentage">88%</span>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td class="department-name">
+              <span class="department-icon">📋</span>
+              Mamógrafo
+            </td>
+            <td class="numeric-cell">2</td>
+            <td class="numeric-cell">1</td>
+            <td class="numeric-cell">1</td>
+            <td>
+              <div class="occupancy-bar-container">
+                <div class="occupancy-bar">
+                  <div class="occupancy-fill occupancy-fill-95"></div>
+                </div>
+                <span class="occupancy-percentage">95%</span>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td class="department-name">
+              <span class="department-icon">📋</span>
+              Ecógrafo
+            </td>
+            <td class="numeric-cell">5</td>
+            <td class="numeric-cell">3</td>
+            <td class="numeric-cell">3</td>
+            <td>
+              <div class="occupancy-bar-container">
+                <div class="occupancy-bar">
+                  <div class="occupancy-fill occupancy-fill-80"></div>
+                </div>
+                <span class="occupancy-percentage">80%</span>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="navigation-controls">
+        <button class="nav-button">‹</button>
+        <div class="progress-bar">
+          <div class="progress-fill"></div>
+        </div>
+        <button class="nav-button">›</button>
+      </div>
+    </div>
+  </main>
+
+</body>
+</html>
